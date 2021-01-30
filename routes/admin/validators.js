@@ -1,5 +1,6 @@
 const { check } = require( "express-validator" );
 const usersRepo = require( "../../repositories/users" );
+const productsRepo = require( '../../repositories/products' );
 
 
 module.exports = {
@@ -54,7 +55,17 @@ module.exports = {
                 throw new Error( "Invalid Password !!" );
             }
 
-        } )
+        } ),
 
+    requireTitle: check( 'title' )
+        .trim()
+        .isLength( { min: 5, max: 40 } )
+        .withMessage( "characters must be between 5 and 40" ),
+
+    requirePrice: check( 'price' )
+        .trim()
+        .toFloat()
+        .isFloat( { min: 1 } )
+        .withMessage( "enter a valid price" )
 
 };
