@@ -1,15 +1,1 @@
-[
-  { "email": "test@test.com" },
-  { "email": "test_one@test.com", "password": "hello", "id": "a0c0b770" },
-  { "email": "test3@test.com", "password": "password", "id": "04ec643f" },
-  {
-    "email": "test5@test.com",
-    "password": "e4a0df03aa036b902abab8ec34b417fc9c6a14f24e2d3399a4657141184431e0422a490ac05974604260f3d8db57c5d4d6c72f7122b0d013b8a8eeafec4c2c38.8057594f81d343e9",
-    "id": "dc321aaa"
-  },
-  {
-    "email": "test6@test.com",
-    "password": "f0be2aa2cd00ee1c7ec72820a56887b57944525a7fc47e08fc958d11ac5406cd6406e8238ce01ab21d97c4e27fbac2d4c44e20d28ac29186751f1689a5264f06.4bc8a47a22d94378",
-    "id": "c4d1a40a"
-  }
-]
+[{"email":"enuazubike88@gmail.com","password":"7b905b8348d3e11760ec554fc08c70641916565a5bee7eec940b804a57a8b9dad25c3de8b0ae683b00a075c466bc4b5d80427a043d9b98a48ba595379a897dde.e88a0df59faa72e6","id":"93ccf80f"},{"email":"kawoyimfor@yahoo.com","password":"97f2100a25298a4b9d625c0dab594ae5c7c211350405fccffff8c5f08dde698be70379e2cef053aa1adaa33a2a2583664080a5152c0a7601b83dcddc6481e61e.9bcab0e58be9d3fe","id":"54713b82"}]

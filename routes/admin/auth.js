@@ -1,5 +1,5 @@
 const express = require( 'express' );
-const { validationResult } = require( 'express-validator' );
+const { handleErrors } = require( './middlewares' );
 const usersRepo = require( "../../repositories/users" );
 const router = express.Router();
 const signUpTemplate = require( "../../views/admin/auth/signup" );
@@ -12,18 +12,17 @@ router.get( '/signup', ( req, res ) => {
 } );
 
 
-router.post( '/signup', [requireEmail, requirePassword, requirePasswordConfirmation], async ( req, res ) => {
-    const errors = validationResult( req );
-    if ( !errors.isEmpty() ) {
-        return res.send( signUpTemplate( { req, errors } ) );
-    }
-    // get access to email and password 
-    const { email, password } = req.body;
-    //create user in our user repository that represents the user 
-    const user = await usersRepo.create( { email, password } );
-    // store the id inside the users cookie  ==> req.session is added by the cookie-session 
-    req.session.userId = user.id;
-    res.send( ` account created !!!` );
+router.post( '/signup', [requireEmail, requirePassword, requirePasswordConfirmation], handleErrors( signUpTemplate ), async ( req, res ) => {
+    try {
+        // get access to email and password 
+        const { email, password, passwordConfirmation } = req.body;
+        //create user in our user repository that represents the user 
+        const user = await usersRepo.create( { email, password } );
+        // store the id inside the users cookie  ==> req.session is added by the cookie-session 
+        req.session.userId = user.id;
+        res.redirect( "/admin/products" );
+    } catch ( err ) { }
+
 } );
 
 //signout
@@ -40,20 +39,21 @@ router.get( '/signin', ( req, res ) => {
 } )
 
 
-router.post( '/signin', [requireValidEmail, requireValidUserPassword], async ( req, res ) => {
-    const errors = validationResult( req );
-    if ( !errors.isEmpty() ) {
-        return res.send( signInTemplate( { errors } ) );
-    }
-    const { email } = req.body;
-    const user = await usersRepo.getOneBy( { email } );
-    if ( !user ) {
-        throw new Error( "Email not found !!" );
+router.post( '/signin', [requireValidEmail, requireValidUserPassword], handleErrors( signInTemplate ), async ( req, res ) => {
+    try {
+        const { email } = req.body;
+        const user = await usersRepo.getOneBy( { email } );
+        if ( !user ) {
+            throw new Error( "Email not found !!" );
+        }
+
+        req.session.userId = user.id;
+
+        res.redirect( "/admin/products" );
+    } catch ( err ) {
+
     }
 
-    req.session.userId = user.id;
-
-    res.send( "You are signed in " );
 
 
 } )

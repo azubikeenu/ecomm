@@ -1,4 +1,3 @@
-
 const fs = require( 'fs' );
 const crypto = require( 'crypto' );
 
@@ -18,13 +17,14 @@ module.exports = class Repository {
 
     }
 
-    async create ( attribute ) {
-        attribute.id = this.randomId();
-        const records = await this.getAll();
-        records.push( attribute );
-        await this.writeAll( records );
-        return attribute;
+    async create ( attrs ) {
+        attrs.id = this.randomId();
 
+        const records = await this.getAll();
+        records.push( attrs );
+        await this.writeAll( records );
+
+        return attrs;
     }
 
     async getAll () {
@@ -32,7 +32,7 @@ module.exports = class Repository {
         return JSON.parse( await fs.promises.readFile( this.fileName, { encoding: "utf-8" } ) );
     }
     async writeAll ( records ) {
-        await ( fs.promises.writeFile( "users.json", JSON.stringify( records ), { encoding: "utf8" } ) );
+        await ( fs.promises.writeFile( this.fileName, JSON.stringify( records ), { encoding: "utf8" } ) );
     }
 
 

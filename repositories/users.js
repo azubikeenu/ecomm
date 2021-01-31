@@ -25,6 +25,7 @@ class UsersRepository extends Repository {
         const [hashed, salt] = savedPassword.split( "." );
         const buff = await scrypt( suppliedPassword, salt, 64 );
         return hashed === buff.toString( 'hex' );
+
     }
 
 

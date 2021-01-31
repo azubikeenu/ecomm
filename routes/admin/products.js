@@ -1,12 +1,19 @@
 const express = require( 'express' );
-const router = express.Router();
-const productsRepo = require( "../../repositories/products" );
-const { validationResult } = require( 'express-validator' );
-const newProductsTemplate = require( '../../views/admin/products/new' );
-const { requireTitle, requirePrice } = require( '../admin/validators' )
+const { handleErrors } = require( './middlewares' );
+const multer = require( 'multer' );
+const productsIndexTemplate = require( '../../views/admin/products/index' );
 
-router.get( "/admin/products", ( req, res ) => {
-    res.send( "LIST PRODUCTS" );
+const productsRepo = require( "../../repositories/products" );
+const newProductsTemplate = require( '../../views/admin/products/new' );
+const { requireTitle, requirePrice } = require( '../admin/validators' );
+
+
+const router = express.Router();
+const upload = multer( { storage: multer.memoryStorage() } )
+
+router.get( "/admin/products", async ( req, res ) => {
+    const products = await productsRepo.getAll();
+    res.send( productsIndexTemplate( { products } ) );
 
 
 } )
@@ -19,19 +26,14 @@ router.get( "/admin/products/new", [], ( req, res ) => {
 } )
 
 
-router.post( "/admin/products/new", [requirePrice, requireTitle], ( req, res ) => {
-    const errors = validationResult( req );
-    console.log( req.body );
-    req.on( 'data', ( data ) => {
-        console.log( data.toString() );
+router.post( "/admin/products/new", upload.single( 'image' ), [requirePrice, requireTitle], handleErrors( newProductsTemplate ), async ( req, res ) => {
+    try {
+        const image = req.file.buffer.toString( 'base64' );
+        const { title, price } = req.body
+        await productsRepo.create( { title, price, image } );
+        res.redirect( "/admin/products" );
+    } catch ( err ) { }
 
-    } )
-    if ( !errors.isEmpty() ) {
-        console.log( errors )
-        return res.send( newProductsTemplate( { errors } ) );
-    }
-
-    res.send( "Form Submittted!" );
 } )
 
 
