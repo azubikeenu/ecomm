@@ -9,21 +9,23 @@ module.exports = class Repository {
         }
         this.fileName = fileName;
         try {
-            fs.accessSync( this.fileName );
+            fs.accessSync( this.fileName ); // if the file exists,open the file
 
         } catch ( err ) {
-            fs.writeFileSync( this.fileName, '[]' );
+            fs.writeFileSync( this.fileName, '[]' ); // if the file doesnt exist,create the file and append an empty array
         }
 
     }
 
     async create ( attrs ) {
         attrs.id = this.randomId();
-
+        // extract all the records from the file 
         const records = await this.getAll();
+        //push new records into the array 
         records.push( attrs );
+        // write the array into the file
         await this.writeAll( records );
-
+        // return the file id 
         return attrs;
     }
 
