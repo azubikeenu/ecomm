@@ -7,9 +7,11 @@ const bodyParser = require( "body-parser" );
 const cookieSession = require( "cookie-session" );
 const authRouter = require( './routes/admin/auth' );
 const adminProductsRouter = require( "./routes/admin/products" );
-const userProductsRouter = require( './routes' );
+const userProductsRouter = require( './routes/products' );
+const cartsRouter = require( "./routes/carts" )
 
 const app = express();
+
 
 
 // make the middleware global
@@ -19,6 +21,7 @@ app.use( cookieSession( { keys: ['kggfhhytwwttwuudhbxvfeettruzxcxv'] } ) );
 app.use( authRouter );
 app.use( adminProductsRouter );
 app.use( userProductsRouter );
+app.use( cartsRouter );
 
 
 // watch for incoming requests on port 3000!
